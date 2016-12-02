@@ -7,9 +7,48 @@
 //
 
 #include <iostream>
+#include "TcpServer.hpp"
+
+int echo_server(int argc, const char* argv[]);
+
+void test();
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << "Hello, World!\n";
+    
+    int mainRtn = 0;
+    try {
+        mainRtn = echo_server(argc, argv);
+    }
+    catch ( const char* s ) {
+        perror(s);
+        exit(EXIT_FAILURE);
+    }
+    
+    return mainRtn;
+    return 0;
+}
+
+int echo_server(int argc, const char* argv[])
+{
+    int port;
+    if ( argc == 2 ) {
+        port = atoi(argv[1]);
+    } else {
+        port = 5000;
+    }
+    
+    port = 5004;
+    
+    std::cout << "listen port = " << port << std::endl;
+    
+    TcpServer myServ(port);
+    
+    while ( true ) {
+        if ( myServ.isAccept() == true ) {
+            myServ.handleEcho();
+        }
+    }
+    
     return 0;
 }
